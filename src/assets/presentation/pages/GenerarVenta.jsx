@@ -19,6 +19,7 @@ import { ClienteProvider } from '../contexts/ClienteContext';
 import { VentaProvider } from '../contexts/VentaContext';
 import { UsuarioActualProvider } from '../contexts/UsuarioActualContext';
 
+
 const GenerarVentaContent = () => {
   const theme = useTheme();
   const { productos, loading: loadingProductos, loadProductos } = useProductos();
@@ -119,10 +120,37 @@ const GenerarVentaContent = () => {
     <>
       <Box sx={{ minHeight: '100vh' }}>
         <Container maxWidth={false} disableGutters sx={{ py: 3, px: 2 }}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={4} lg={3}>
+          <Box
+            sx={{
+              display: 'flex',
+              gap: 3,
+              alignItems: 'flex-start',
+              width: '100%'
+            }}
+          >
+            <Box
+                sx={{
+                  width: 320,
+                  minWidth: 320
+                }}
+              >
               <Slide direction="right" in timeout={500}>
-                <Paper elevation={3} sx={{ borderRadius: 4, overflow: 'hidden', position: 'sticky', top: 20, bgcolor: theme.palette.mode === 'dark' ? '#1E293B' : '#FFFFFF' }}>
+                <Paper
+                  elevation={3}
+                  sx={{
+                    borderRadius: 4,
+                    overflow: 'hidden',
+                    position: 'sticky',
+                    top: 20,
+                    width: '100%',
+                    minHeight: '85vh',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    bgcolor: theme.palette.mode === 'dark'
+                      ? '#1E293B'
+                      : '#FFFFFF'
+                  }}
+                >
                   <Box sx={{ p: 2, bgcolor: '#3B82F6', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}><ShoppingCartIcon /><Typography variant="h6" fontWeight="bold">Venta</Typography></Box>
                     <Badge badgeContent={cartItems.length} color="error"><ReceiptLongIcon /></Badge>
@@ -132,7 +160,13 @@ const GenerarVentaContent = () => {
                     <Autocomplete fullWidth size="small" options={clientes} getOptionLabel={(option) => `${option.nombreCompleto} - CI: ${option.ci}`} isOptionEqualToValue={(option, value) => option.id === value?.id} value={clientes.find(c => c.id === selectedCliente) || null} onChange={(event, newValue) => setSelectedCliente(newValue ? newValue.id : '')} renderInput={(params) => <TextField {...params} label="Buscar cliente" placeholder="Escriba nombre, apellido o CI..." variant="outlined" />} renderOption={(props, option) => (<li {...props}><Box><Typography variant="body2" fontWeight="bold">{option.nombreCompleto}</Typography><Typography variant="caption" color="text.secondary">CI: {option.ci} | Tel: {option.telefono}</Typography></Box></li>)} filterOptions={(options, { inputValue }) => { const sv = inputValue.toLowerCase(); return options.filter(opt => opt.nombreCompleto.toLowerCase().includes(sv) || opt.ci.toLowerCase().includes(sv) || opt.telefono.toLowerCase().includes(sv)); }} />
                   </Box>
 
-                  <Box sx={{ maxHeight: 'calc(100vh - 450px)', overflowY: 'auto', p: 2 }}>
+                  <Box
+                    sx={{
+                      flexGrow: 1,
+                      overflowY: 'auto',
+                      p: 2
+                    }}
+                  >
                     {cartItems.length === 0 ? (
                       <Box sx={{ textAlign: 'center', py: 8 }}><ShoppingCartIcon sx={{ fontSize: 80, color: '#ccc', mb: 2 }} /><Typography variant="body1" color="text.secondary">No hay productos agregados</Typography><Typography variant="body2" color="text.secondary">Selecciona productos de la lista</Typography></Box>
                     ) : cartItems.map((item, index) => {
@@ -141,7 +175,7 @@ const GenerarVentaContent = () => {
                     })}
                   </Box>
 
-                  <Box sx={{ p: 2, borderTop: 1, borderColor: 'divider', bgcolor: alpha('#000', 0.02) }}>
+                  <Box sx={{ p: 2, borderTop: 1, mt: 'auto', borderColor: 'divider', bgcolor: alpha('#000', 0.02) }}>
                     {ventaError && <Alert severity="error" sx={{ mb: 2 }}>{ventaError}</Alert>}
                     <Stack spacing={1}>
                       <Box display="flex" justifyContent="space-between"><Typography variant="body2" color="text.secondary">Subtotal:</Typography><Typography variant="body2">{formatPrice(calculateSubtotal())}</Typography></Box>
@@ -153,7 +187,7 @@ const GenerarVentaContent = () => {
                   </Box>
                 </Paper>
               </Slide>
-            </Grid>
+            </Box>
 
             <Grid item xs={12} md={8} lg={9} sx={{ flexGrow: 1 }}>
               <Paper elevation={2} sx={{ p: 2, mb: 3, borderRadius: 3, display: 'flex', alignItems: 'center', gap: 1, width: '100%' }}>
@@ -164,11 +198,26 @@ const GenerarVentaContent = () => {
                 {filteredProducts.map((producto, index) => (
                   <Zoom in timeout={300 + index * 100} key={producto.id}>
                     <Grid item xs={12} sm={6} md={4} lg={3}>
-                      <Card sx={{ borderRadius: 3, transition: 'all 0.3s ease', cursor: producto.stock === 0 ? 'not-allowed' : 'pointer', '&:hover': { transform: 'translateY(-5px)', boxShadow: 6 }, height: '100%', display: 'flex', flexDirection: 'column', opacity: producto.stock === 0 ? 0.6 : 1 }} onClick={() => addToCart(producto)}>
-                        {producto.stock === 0 && <Chip label="Sin Stock" size="small" color="error" sx={{ position: 'absolute', top: 10, right: 10, zIndex: 1 }} />}
+                      <Card
+                        sx={{
+                          borderRadius: 3,
+                          transition: 'all 0.3s ease',
+                          cursor: producto.stock === 0 ? 'not-allowed' : 'pointer',
+                          '&:hover': {
+                            transform: 'translateY(-5px)',
+                            boxShadow: 6
+                          },
+                          width: 230,
+                          minWidth: 230,
+                          maxWidth: 230,
+                          height: 400,
+                          display: 'flex',
+                          flexDirection: 'column',
+                          opacity: producto.stock === 0 ? 0.6 : 1
+                        }}
+                      >
                        <CardMedia
                           component="img"
-                          height="150"
                           image={producto.imagenUrl || '/images/default.png'}
                           alt={producto.nombre}
                           onError={(e) => {
@@ -176,19 +225,98 @@ const GenerarVentaContent = () => {
                             e.target.src = '/images/default.png';
                           }}
                           sx={{
+                            height: 140,
+                            width: '100%',
                             objectFit: 'contain',
                             p: 2
                           }}
                         />
-                        <CardContent sx={{ flexGrow: 1 }}>
-                          <Typography variant="subtitle2" color="text.secondary" gutterBottom>{producto.modelo}</Typography>
-                          <Typography variant="body1" fontWeight="bold" noWrap>{producto.nombre}</Typography>
-                          <Typography variant="caption" color="text.secondary" display="block" gutterBottom>{producto.categoria?.nombre} | {producto.marca?.nombre}</Typography>
-                          <Box display="flex" justifyContent="space-between" alignItems="center" mt={1}>
-                            <Typography variant="h6" color="primary" fontWeight="bold">{formatPrice(producto.precio)}</Typography>
-                            <Chip label={`Stock: ${producto.stock}`} size="small" color={producto.stock > 0 ? "success" : "error"} variant="outlined" />
+                        <CardContent
+                            sx={{
+                              flexGrow: 1,
+                              display: 'flex',
+                              flexDirection: 'column'
+                            }}
+                          >
+                          <Typography
+                            variant="subtitle2"
+                            color="text.secondary"
+                            sx={{
+                              height: 20,
+                              overflow: 'hidden'
+                            }}
+                          >
+                            {producto.modelo}
+                          </Typography>
+
+                          <Typography
+                            variant="body1"
+                            fontWeight="bold"
+                            sx={{
+                              height: 48,
+                              overflow: 'hidden',
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical'
+                            }}
+                          >
+                            {producto.nombre}
+                          </Typography>
+
+                          <Typography
+                            variant="caption"
+                            color="text.secondary"
+                            sx={{
+                              height: 36,
+                              overflow: 'hidden',
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical'
+                            }}
+                          >
+                            {producto.categoria?.nombre} | {producto.marca?.nombre}
+                          </Typography>
+
+                          <Box
+                            display="flex"
+                            justifyContent="space-between"
+                            alignItems="center"
+                            mt={1}
+                          >
+                            <Typography
+                              variant="h6"
+                              color="primary"
+                              fontWeight="bold"
+                            >
+                              {formatPrice(producto.precio)}
+                            </Typography>
+
+                            <Chip
+                              label={`Stock: ${producto.stock}`}
+                              size="small"
+                              color={producto.stock > 0 ? "success" : "error"}
+                              variant="outlined"
+                            />
                           </Box>
-                          <Button variant="contained" fullWidth size="small" sx={{ mt: 2, bgcolor: '#3B82F6' }} startIcon={<AddIcon />} disabled={producto.stock === 0} onClick={(e) => { e.stopPropagation(); addToCart(producto); }}>Agregar</Button>
+
+                          <Box sx={{ mt: 'auto' }}>
+                            <Button
+                              variant="contained"
+                              fullWidth
+                              size="small"
+                              startIcon={<AddIcon />}
+                              disabled={producto.stock === 0}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                addToCart(producto);
+                              }}
+                              sx={{
+                                bgcolor: '#3B82F6'
+                              }}
+                            >
+                              Agregar
+                            </Button>
+                          </Box>
                         </CardContent>
                       </Card>
                     </Grid>
@@ -197,7 +325,7 @@ const GenerarVentaContent = () => {
                 {filteredProducts.length === 0 && !loadingProductos && <Grid item xs={12}><Box sx={{ textAlign: 'center', py: 8 }}><Typography variant="h6" color="text.secondary">No se encontraron productos</Typography></Box></Grid>}
               </Grid>
             </Grid>
-          </Grid>
+          </Box>
         </Container>
       </Box>
 
