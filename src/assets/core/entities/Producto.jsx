@@ -22,9 +22,9 @@ export class Producto {
     this.descripcion = descripcion || '';
     this.imagen = imagen;
     
-    // this.imagenUrl = imagen_url || (imagen ? `http://localhost:8000/storage/${imagen}` : null);
+    this.imagenUrl = imagen_url || (imagen ? `http://localhost:8000/storage/${imagen}` : null);
 
-    this.imagenUrl = imagen_url || (imagen ? `https://tienda-componenetes-backend.onrender.com//storage/${imagen}` : null);
+    // this.imagenUrl = imagen_url || (imagen ? `https://tienda-componenetes-backend.onrender.com//storage/${imagen}` : null);
     this.precio = parseFloat(precio);
     this.stock = stock;
     this.estado = estado;
@@ -50,8 +50,8 @@ export class Producto {
 
   getImagenUrl() {
     if (this.imagenUrl) return this.imagenUrl;
-    // if (this.imagen) return `http://localhost:8000/storage/${this.imagen}`;
-    if (this.imagen) return `https://tienda-componenetes-backend.onrender.com/storage/${this.imagen}`;
+    if (this.imagen) return `http://localhost:8000/storage/${this.imagen}`;
+    // if (this.imagen) return `https://tienda-componenetes-backend.onrender.com/storage/${this.imagen}`;
     return '/images/default-product.png';
   }
 
