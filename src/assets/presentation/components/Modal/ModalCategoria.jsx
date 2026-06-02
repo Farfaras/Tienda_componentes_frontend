@@ -39,7 +39,15 @@ export const ModalCategoria = ({ open, onClose, mode, categoriaData, onSave }) =
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.nombre.trim()) newErrors.nombre = 'El nombre es requerido';
+
+    if (!formData.nombre.trim()) {
+      newErrors.nombre = 'El nombre es requerido';
+    }
+
+    if (!formData.descripcion.trim()) {
+      newErrors.descripcion = 'La descripción es requerida';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -116,6 +124,9 @@ export const ModalCategoria = ({ open, onClose, mode, categoriaData, onSave }) =
             size="small"
             multiline
             rows={3}
+            required
+            error={!!errors.descripcion}
+            helperText={errors.descripcion}
             disabled={loading}
           />
 
