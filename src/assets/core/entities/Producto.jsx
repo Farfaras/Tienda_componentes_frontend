@@ -50,7 +50,7 @@ export class Producto {
 
   getImagenUrl() {
     if (this.imagenUrl) return this.imagenUrl;
-    //if (this.imagen) return `http://localhost:8000/storage/${this.imagen}`;
+    // if (this.imagen) return `http://localhost:8000/storage/${this.imagen}`;
     if (this.imagen) return `https://tienda-componenetes-backend.onrender.com/storage/${this.imagen}`;
     return '/images/default-product.png';
   }
