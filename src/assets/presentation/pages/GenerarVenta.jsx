@@ -120,7 +120,7 @@ const GenerarVentaContent = () => {
       <Box sx={{ minHeight: '100vh' }}>
         <Container maxWidth={false} disableGutters sx={{ py: 3, px: 2 }}>
           <Grid container spacing={3}>
-            <Grid item xs={12} md={8} lg={9}>
+            <Grid item xs={12} md={4} lg={3}>
               <Slide direction="right" in timeout={500}>
                 <Paper elevation={3} sx={{ borderRadius: 4, overflow: 'hidden', position: 'sticky', top: 20, bgcolor: theme.palette.mode === 'dark' ? '#1E293B' : '#FFFFFF' }}>
                   <Box sx={{ p: 2, bgcolor: '#3B82F6', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -166,7 +166,20 @@ const GenerarVentaContent = () => {
                     <Grid item xs={12} sm={6} md={4} lg={3}>
                       <Card sx={{ borderRadius: 3, transition: 'all 0.3s ease', cursor: producto.stock === 0 ? 'not-allowed' : 'pointer', '&:hover': { transform: 'translateY(-5px)', boxShadow: 6 }, height: '100%', display: 'flex', flexDirection: 'column', opacity: producto.stock === 0 ? 0.6 : 1 }} onClick={() => addToCart(producto)}>
                         {producto.stock === 0 && <Chip label="Sin Stock" size="small" color="error" sx={{ position: 'absolute', top: 10, right: 10, zIndex: 1 }} />}
-                        <CardMedia component="img" height="150" image={producto.imagenUrl || '/images/default-product.png'} alt={producto.nombre} sx={{ objectFit: 'contain', p: 2 }} />
+                       <CardMedia
+                          component="img"
+                          height="150"
+                          image={producto.imagenUrl || '/images/default.png'}
+                          alt={producto.nombre}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = '/images/default.png';
+                          }}
+                          sx={{
+                            objectFit: 'contain',
+                            p: 2
+                          }}
+                        />
                         <CardContent sx={{ flexGrow: 1 }}>
                           <Typography variant="subtitle2" color="text.secondary" gutterBottom>{producto.modelo}</Typography>
                           <Typography variant="body1" fontWeight="bold" noWrap>{producto.nombre}</Typography>
