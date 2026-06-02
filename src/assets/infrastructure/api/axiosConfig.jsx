@@ -1,9 +1,9 @@
 // src/infrastructure/api/axiosConfig.js
 import axios from 'axios';
 
-// const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = 'http://localhost:8000/api';
 
-const API_BASE_URL = 'https://tienda-componenetes-backend.onrender.com/api';
+// const API_BASE_URL = 'https://tienda-componenetes-backend.onrender.com/api';
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,

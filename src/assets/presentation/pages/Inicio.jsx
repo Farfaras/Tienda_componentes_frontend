@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Box,
@@ -7,11 +7,17 @@ import {
   Typography,
   useTheme,
   Skeleton,
-  Grid,
   Paper,
   Divider,
-  Chip
+  Chip,
+  Button,
+  Stack
 } from '@mui/material';
+import SmartToyIcon from '@mui/icons-material/SmartToy';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import ShowChartIcon from '@mui/icons-material/ShowChart';
+import AssessmentIcon from '@mui/icons-material/Assessment';
 
 import PeopleIcon from '@mui/icons-material/People';
 import PersonIcon from '@mui/icons-material/Person';
@@ -35,12 +41,28 @@ import { useDashboard } from '../hooks/useDashboard';
 import { useDashboardGraficas } from '../hooks/useDashboardGraficas';
 import { DashboardProvider } from '../contexts/DashboardContext';
 import { DashboardGraficasProvider } from '../contexts/DashboardGraficasContext';
+import AIAnalysisModal from '../components/Modal/AIAnalysisModal';
 
 const InicioContent = () => {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const { counts, loading: loadingCounts } = useDashboard();
   const { ventasSemanales, ventasMensuales, topProductos, estadisticas, loading: loadingGraficas } = useDashboardGraficas();
+
+  // Estados para modales de IA
+  const [modalIA, setModalIA] = useState({
+    open: false,
+    title: '',
+    endpoint: ''
+  });
+
+  const openIAModal = (title, endpoint) => {
+    setModalIA({ open: true, title, endpoint });
+  };
+
+  const closeIAModal = () => {
+    setModalIA({ open: false, title: '', endpoint: '' });
+  };
 
   const CardResumen = ({ titulo, valor, icono, color, to }) => (
     <Card
@@ -77,7 +99,6 @@ const InicioContent = () => {
     return new Intl.NumberFormat('es-BO', { style: 'currency', currency: 'BOB' }).format(value);
   };
 
-  // Colores para modo oscuro/claro
   const axisColor = isDark ? '#E2E8F0' : '#64748B';
   const gridColor = isDark ? '#334155' : '#E2E8F0';
   const tooltipBg = isDark ? '#1E293B' : '#FFFFFF';
@@ -109,9 +130,27 @@ const InicioContent = () => {
         {/* Ventas Semanales */}
         <Card sx={{ borderRadius: 3, boxShadow: 3 }}>
           <CardContent>
-            <Typography variant="h6" fontWeight="bold" sx={{ mb: 3 }}>
-              Ventas Semanales
-            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+              <Typography variant="h6" fontWeight="bold">Ventas Semanales</Typography>
+              <Button
+                variant="outlined"
+                size="small"
+                startIcon={<SmartToyIcon />}
+                onClick={() => openIAModal('Análisis de Ventas Semanales', '/ai-analysis/ventas-semanales')}
+                sx={{
+                  borderRadius: 2,
+                  textTransform: 'none',
+                  borderColor: '#3B82F6',
+                  color: '#3B82F6',
+                  '&:hover': {
+                    borderColor: '#2563EB',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)'
+                  }
+                }}
+              >
+                Análisis con IA
+              </Button>
+            </Box>
 
             {loadingGraficas ? (
               <Skeleton variant="rounded" height={420} />
@@ -146,9 +185,27 @@ const InicioContent = () => {
         {/* Ventas Mensuales */}
         <Card sx={{ borderRadius: 3, boxShadow: 3 }}>
           <CardContent>
-            <Typography variant="h6" fontWeight="bold" sx={{ mb: 3 }}>
-              Ventas Últimos 6 Meses
-            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+              <Typography variant="h6" fontWeight="bold">Ventas Últimos 6 Meses</Typography>
+              <Button
+                variant="outlined"
+                size="small"
+                startIcon={<SmartToyIcon />}
+                onClick={() => openIAModal('Análisis de Tendencia 6 Meses', '/ai-analysis/tendencia-6-meses')}
+                sx={{
+                  borderRadius: 2,
+                  textTransform: 'none',
+                  borderColor: '#3B82F6',
+                  color: '#3B82F6',
+                  '&:hover': {
+                    borderColor: '#2563EB',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)'
+                  }
+                }}
+              >
+                Análisis con IA
+              </Button>
+            </Box>
 
             {loadingGraficas ? (
               <Skeleton variant="rounded" height={420} />
@@ -185,9 +242,27 @@ const InicioContent = () => {
         {/* Top Productos */}
         <Card sx={{ borderRadius: 3, boxShadow: 3 }}>
           <CardContent>
-            <Typography variant="h6" fontWeight="bold" sx={{ mb: 3 }}>
-              Top 5 Productos Más Vendidos
-            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+              <Typography variant="h6" fontWeight="bold">Top 5 Productos Más Vendidos</Typography>
+              <Button
+                variant="outlined"
+                size="small"
+                startIcon={<SmartToyIcon />}
+                onClick={() => openIAModal('Análisis de Productos Más Vendidos', '/ai-analysis/top-productos')}
+                sx={{
+                  borderRadius: 2,
+                  textTransform: 'none',
+                  borderColor: '#3B82F6',
+                  color: '#3B82F6',
+                  '&:hover': {
+                    borderColor: '#2563EB',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)'
+                  }
+                }}
+              >
+                Análisis con IA
+              </Button>
+            </Box>
 
             {loadingGraficas ? (
               <Skeleton variant="rounded" height={420} />
@@ -205,7 +280,7 @@ const InicioContent = () => {
                     dataKey="nombre" 
                     width={120}
                     stroke={axisColor}
-                    tick={{ fill: axisColor, fontSize: 16 }}
+                    tick={{ fill: axisColor, fontSize: 12 }}
                   />
                   <Tooltip 
                     formatter={(value) => `${value} unidades`}
@@ -232,9 +307,27 @@ const InicioContent = () => {
         {/* Estadísticas */}
         <Card sx={{ borderRadius: 3, boxShadow: 3 }}>
           <CardContent>
-            <Typography variant="h6" fontWeight="bold" sx={{ mb: 3 }}>
-              Ventas Activas vs Anuladas
-            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+              <Typography variant="h6" fontWeight="bold">Ventas Activas vs Anuladas</Typography>
+              <Button
+                variant="outlined"
+                size="small"
+                startIcon={<SmartToyIcon />}
+                onClick={() => openIAModal('Análisis Comparativo: Activas vs Anuladas', '/ai-analysis/comparativa-activas-anuladas')}
+                sx={{
+                  borderRadius: 2,
+                  textTransform: 'none',
+                  borderColor: '#3B82F6',
+                  color: '#3B82F6',
+                  '&:hover': {
+                    borderColor: '#2563EB',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)'
+                  }
+                }}
+              >
+                Análisis con IA
+              </Button>
+            </Box>
 
             {loadingGraficas ? (
               <Skeleton variant="rounded" height={420} />
@@ -308,6 +401,14 @@ const InicioContent = () => {
           </CardContent>
         </Card>
       </Box>
+
+      {/* Modal de Análisis IA */}
+      <AIAnalysisModal
+        open={modalIA.open}
+        onClose={closeIAModal}
+        title={modalIA.title}
+        endpoint={modalIA.endpoint}
+      />
     </Box>
   );
 };
