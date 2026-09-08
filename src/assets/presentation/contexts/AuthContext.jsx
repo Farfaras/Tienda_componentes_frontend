@@ -63,6 +63,12 @@ export const AuthProvider = ({ children }) => {
       setTempEmail(result.email);
       return { requiresTwoFactor: true, email: result.email };
     }
+
+    if (result.success && result.token) {
+      setUser(result.user);
+      setIsAuthenticated(true);
+      setTempEmail(null);
+    }
     
     return result;
   };

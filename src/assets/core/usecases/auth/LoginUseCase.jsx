@@ -1,4 +1,6 @@
 // src/core/usecases/auth/LoginUseCase.js
+import { User } from '../../entities/User';
+
 export class LoginUseCase {
   constructor(authRepository) {
     this.authRepository = authRepository;
@@ -20,6 +22,19 @@ export class LoginUseCase {
         return {
           success: false,
           error: response.message || 'Credenciales inválidas'
+        };
+      }
+
+      // Si devuelve token directamente (usuario sin 2FA obligatorio)
+      if (response.token) {
+        localStorage.setItem('token', response.token);
+        const user = response.user ? new User(response.user) : null;
+        return {
+          success: true,
+          requiresTwoFactor: false,
+          token: response.token,
+          user: user,
+          message: response.message
         };
       }
       
